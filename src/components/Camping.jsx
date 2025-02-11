@@ -1,7 +1,41 @@
+import { Html, useGLTF } from "@react-three/drei";
+import { useAtom } from "jotai";
+import React from "react";
+import { degToRad } from "three/src/math/MathUtils";
+import { currentPageAtom } from "./UI";
+// import tailwindcss from '@tailwindcss/vite'
 
-
-import React from 'react'
-import { useGLTF } from '@react-three/drei'
+const OverlayItem = ({
+  className = "",
+  title,
+  description,
+  price,
+  bgColor,
+  ...props
+}) =>{
+  const [currentPage] = useAtom(currentPageAtom);
+  return (
+    <Html
+      transform
+      distanceFactor={1.2}
+      center
+      className={`w-48 rounded-md overflow-hidden ${
+        currentPage === "store" ? "" : "opacity-0"
+      } transition-opacity duration-1000 ${className}`}
+      {...props}
+    >
+      <div className="bg-white bg-opacity-50 backdrop-blur-lg text-xs p-2 w-full">
+        <h2 className="font-bold">{title}</h2>
+        <p>{description}</p>
+      </div>
+      <button
+        className={`${bgColor} hover:bg-opacity-50 transition-colors duration-500 px-4 py-2 font-bold text-white w-full text-xs`}
+      >
+        Add to cart ${price}
+      </button>
+    </Html>
+  );
+};
 
 export function Camping( html, ...props ) {
   const { nodes, materials } = useGLTF("/models/Swamp Island.glb")
@@ -229,11 +263,25 @@ export function Camping( html, ...props ) {
           <mesh name="mesh1613210848_1" geometry={nodes.mesh1613210848_1.geometry} material={materials.mat12} />
           <mesh name="mesh1613210848_2" geometry={nodes.mesh1613210848_2.geometry} material={materials.mat19} />
         </group>
-        <group name="group1824730829">
+        <group name="bridge">
           <mesh name="mesh1824730829" geometry={nodes.mesh1824730829.geometry} material={materials.mat19} />
           <mesh name="mesh1824730829_1" geometry={nodes.mesh1824730829_1.geometry} material={materials.mat20} />
+
+          {html && (
+            <OverlayItem
+              rotation-y={degToRad(20)}
+              position-x={-1.4}
+              position-z={-0.5}
+              position-y={-0.1}
+              title={"Tent"}
+              description={"2 person tent, rest assured you'll be dry."}
+              price={"129.99"}
+              bgColor={"bg-yellow-500"}
+              className={"transition delay-1000"}
+            />
+          )}
         </group>
-        <mesh name="group1287028882" geometry={nodes.group1287028882.geometry} material={materials.mat22} />
+        <mesh name="Bonefire" geometry={nodes.Bonefire.geometry} material={materials.mat22} />
         <mesh name="group1428317787" geometry={nodes.group1428317787.geometry} material={materials.mat22} />
         <mesh name="group1121629105" geometry={nodes.group1121629105.geometry} material={materials.mat22} />
         <mesh name="group1031434764" geometry={nodes.group1031434764.geometry} material={materials.mat13} />
@@ -247,7 +295,7 @@ export function Camping( html, ...props ) {
         <mesh name="group522174342" geometry={nodes.group522174342.geometry} material={materials.mat14} />
         <mesh name="group983657705" geometry={nodes.group983657705.geometry} material={materials.mat14} />
         <mesh name="group1868357813" geometry={nodes.group1868357813.geometry} material={materials.mat14} />
-        <group name="group176447540">
+        <group name="Camp">
           <mesh name="mesh176447540" geometry={nodes.mesh176447540.geometry} material={materials.mat14} />
           <mesh name="mesh176447540_1" geometry={nodes.mesh176447540_1.geometry} material={materials.mat12} />
         </group>
